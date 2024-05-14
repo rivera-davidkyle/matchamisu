@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, Button } from "@mui/material";
+import { Paper, IconButton } from "@mui/material";
 import { useDrop } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
 
@@ -7,9 +7,13 @@ let initialStyle = {
   border: "5px dashed",
   borderColor: "#4A490F",
   background: "#D8D796",
-  display: "block",
+  display: "flex",
+  height: "30vw",
+  cursor: "pointer",
+  justifyContent: "center",
+  alignItems: "center",
 };
-const UploadZone = (props) => {
+function UploadZone(props) {
   const { onDrop, onFileChange } = props;
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
@@ -33,8 +37,7 @@ const UploadZone = (props) => {
   const isActive = canDrop && isOver;
 
   return (
-    <Paper ref={drop} sx={initialStyle}>
-      {isActive ? "Release to drop" : "Drag file here"}
+    <>
       <input
         type="file"
         accept="image/*"
@@ -43,12 +46,12 @@ const UploadZone = (props) => {
         hidden
       />
       <label htmlFor="raised-button-file">
-        <Button variant="raised" component="span">
-          Upload
-        </Button>
+        <Paper ref={drop} sx={initialStyle}>
+          {isActive ? "Release to drop" : "Drag file here"}
+        </Paper>
       </label>
-    </Paper>
+    </>
   );
-};
+}
 
 export default UploadZone;

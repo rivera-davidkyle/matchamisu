@@ -6,9 +6,39 @@ import React, { useEffect, useState, useCallback } from "react";
 import recipeStruct from "./static/recipe_structure.json";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import * as Yup from "yup";
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_AI_API_KEY);
+
+const RecipeSchema = Yup.object().shape({
+  recipe: Yup.object()
+    .shape({
+      title: Yup.string().required("Title is required"),
+      description: Yup.string(),
+      ingredients: Yup.array()
+        .of(Yup.string())
+        .required("Ingredients are required"),
+      instructions: Yup.array()
+        .of(Yup.string())
+        .required("Instructions are required"),
+      prep_time: Yup.string(),
+      cook_time: Yup.string(),
+      total_time: Yup.string(),
+      servings: Yup.number().integer().required("Servings must be provided"),
+      tags: Yup.array().of(Yup.string()),
+    })
+    .required(),
+});
+
+function validateJSON(jsonString) {
+  try {
+    let recipe = JSON.parse(jsonString);
+    return RecipeSchema.validate(recipe);
+  } catch (error) {
+    return false;
+  }
+}
 
 // Function to convert image to base64
 function convertBlobToBase64(file) {
@@ -17,15 +47,6 @@ function convertBlobToBase64(file) {
     reader.onloadend = () => resolve(reader.result.split(",")[1]);
     reader.readAsDataURL(file);
   });
-}
-
-function validateJSON(jsonString) {
-  try {
-    JSON.parse(jsonString);
-    return true;
-  } catch (error) {
-    return false;
-  }
 }
 
 function App() {
@@ -64,12 +85,12 @@ function App() {
         console.log("Called google API");
         const response = await result.response;
         jsonString = response.text();
+        console.log(jsonString);
       }
     } catch (error) {
       console.log(error);
     }
     setJsonObject(JSON.parse(jsonString));
-    console.log(jsonString);
   }
 
   return (
@@ -82,17 +103,11 @@ function App() {
             </DndProvider>
           </Grid>
           <Grid item xs={12}>
-            <Recipe />
-            {jsonObject && <div>{jsonObject["recipe"]["title"]}</div>}
+            {jsonObject && <Recipe recipe={jsonObject} />}
           </Grid>
         </Grid>
       </Container>
     </div>
-    // <div>
-    //   <input type="file" onChange={handleFileChange} />
-    //   <button onClick={getRecipe}>Upload</button>
-    //   {jsonObject && <div>{jsonObject["recipe"]["title"]}</div>}
-    // </div>
   );
 }
 

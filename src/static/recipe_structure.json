@@ -1,13 +1,22 @@
 {
-  "recipe": {
-    "title": "",
-    "description": "",
-    "ingredients": [],
-    "instructions": [],
-    "prep_time": "",
-    "cook_time": "",
-    "total_time": "",
-    "servings": 0,
-    "tags": []
+  "type": "object",
+  "properties": {
+    "recipe": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "ingredients": { "type": "array", "items": { "type": "string",
+        "description": "Ingredient following this format: <quantity> <ingredient-name>" } },
+        "instructions": { "type": "array", "items": { "type": "string",
+        "description": "Instructions following this format: <numerical-sequence>. <instruction>"} },
+        "prep_time": { "type": "string" },
+        "cook_time": { "type": "string" },
+        "total_time": { "type": "string" },
+        "servings": { "type": "integer" },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["title", "ingredients", "instructions", "servings"]
+    }
   }
 }

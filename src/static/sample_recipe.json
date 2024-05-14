@@ -1,0 +1,36 @@
+{
+    "recipe": {
+      "title": "Matcha Tiramisu",
+      "description": "A delightful twist on the classic Italian dessert, infused with the earthy flavor of matcha green tea.",
+      "ingredients": [
+        "1 cup heavy cream",
+        "1 cup mascarpone cheese",
+        "1/4 cup granulated sugar",
+        "2 tablespoons matcha green tea powder",
+        "1 teaspoon vanilla extract",
+        "1 cup brewed strong coffee, cooled",
+        "2 tablespoons rum or coffee liqueur",
+        "24 ladyfinger cookies",
+        "Cocoa powder, for dusting"
+      ],
+      "instructions": [
+        "In a large mixing bowl, beat the heavy cream until stiff peaks form.",
+        "In another bowl, whisk together the mascarpone cheese, granulated sugar, matcha powder, and vanilla extract until smooth.",
+        "Gently fold the whipped cream into the mascarpone mixture until well combined.",
+        "In a shallow dish, mix the brewed coffee and rum or coffee liqueur.",
+        "Quickly dip each ladyfinger into the coffee mixture, making sure not to soak them for too long.",
+        "Arrange a layer of soaked ladyfingers in the bottom of a serving dish.",
+        "Spread half of the matcha mascarpone mixture over the ladyfingers.",
+        "Repeat with another layer of soaked ladyfingers and the remaining matcha mascarpone mixture.",
+        "Cover and refrigerate the tiramisu for at least 4 hours, or overnight, to allow the flavors to meld.",
+        "Before serving, dust the top of the tiramisu with cocoa powder.",
+        "Slice and serve chilled. Enjoy!"
+      ],
+      "prep_time": "20 minutes",
+      "cook_time": "0 minutes",
+      "total_time": "4 hours 20 minutes",
+      "servings": 8,
+      "tags": ["Dessert", "Italian", "Matcha", "Tiramisu"]
+    }
+  }
+  

@@ -2,10 +2,14 @@ import "./App.css";
 import Upload from "./components/upload.jsx";
 import Recipe from "./components/recipe.jsx";
 import { Container, Grid } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import recipeStruct from "./static/recipe_structure.json";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
+
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const genAI = new GoogleGenerativeAI("AIzaSyAf-dX29W94ZIHES3kLLSz6-byjokYQzk8");
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
 
 // Function to convert image to base64
 function convertBlobToBase64(file) {
@@ -38,15 +42,26 @@ function App() {
     recipeStruct
   )}. Don't format in markdown, but just a JSON string.`;
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
+  // const handleFileChange = (item) => {
+  //   setSelectedFile(item.files[0]);
+  //   getRecipe();
+  // };
+  const handleFileChange = useCallback(
+    (item) => {
+      if (item) {
+        const files = item.files[0];
+        setSelectedFile(files)
+        getRecipe();
+      }
+    },
+    [setSelectedFile],
+  );
 
   async function getRecipe() {
     let jsonString = "";
+    console.log("Getting recipe..");
     try {
       while (!validateJSON(jsonString)) {
-        // const blob = await convertImageToBlob(foodtest);
         const base64String = await convertBlobToBase64(selectedFile);
         const image = {
           inlineData: {
@@ -58,7 +73,6 @@ function App() {
         console.log("Called google API");
         const response = await result.response;
         jsonString = response.text();
-        // jsonString = JSON.stringify(sampleRecipe);
       }
     } catch(error) {
       console.log(error);
@@ -72,10 +86,13 @@ function App() {
       <Container disableGutters>
         <Grid container spacing={4}>
           <Grid item xs={12}>
-            <Upload />
+            <DndProvider backend={HTML5Backend}>
+              <Upload onDrop={handleFileChange}/>
+            </DndProvider>
           </Grid>
           <Grid item xs={12}>
             <Recipe />
+            {jsonObject && <div>{jsonObject["recipe"]["title"]}</div>}
           </Grid>
         </Grid>
       </Container>

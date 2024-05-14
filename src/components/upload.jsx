@@ -3,11 +3,7 @@ import { Paper } from "@mui/material";
 import { useDrop } from 'react-dnd'
 import { NativeTypes } from 'react-dnd-html5-backend'
 
-let paperStyle = {
-
-}
-
-function upload(props) {
+const UploadZone = (props) => {
     const { onDrop } = props
     const [{ canDrop, isOver }, drop] = useDrop(
         () => ({
@@ -37,12 +33,14 @@ function upload(props) {
         }),
         [props],
     )
-    const isActive = canDrop && isOver
-  return (
-    <Paper ref={drop}>
-        {isActive ? 'Release to drop' : 'Drag file here'}
-    </Paper>
-  )
-}
-
-export default upload
+  
+    const isActive = canDrop && isOver;
+  
+    return (
+        <Paper ref={drop}>
+            {isActive ? 'Release to drop' : 'Drag file here'}
+        </Paper>
+    );
+  };
+  
+  export default UploadZone;

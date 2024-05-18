@@ -34,8 +34,11 @@ const RecipeSchema = Yup.object().shape({
 function validateJSON(jsonString) {
   try {
     let recipe = JSON.parse(jsonString);
-    return RecipeSchema.validate(recipe);
+    let isValid = RecipeSchema.validate(recipe);
+    console.log("VALID?", isValid);
+    return isValid;
   } catch (error) {
+    console.log("INVALID JSON, CANNOT PARSE", false);
     return false;
   }
 }
@@ -50,7 +53,8 @@ function convertBlobToBase64(file) {
 }
 
 function App() {
-  const [jsonObject, setJsonObject] = useState();
+  const [jsonObject, setJsonObject] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
   const prompt = `Create a recipe of this image following this schema ${JSON.stringify(
@@ -70,6 +74,7 @@ function App() {
   }, []);
 
   async function getRecipe(files) {
+    setLoading(true);
     let jsonString = "";
     console.log("Getting recipe..");
     try {
@@ -85,26 +90,43 @@ function App() {
         console.log("Called google API");
         const response = await result.response;
         jsonString = response.text();
-        console.log(jsonString);
       }
     } catch (error) {
       console.log(error);
     }
     setJsonObject(JSON.parse(jsonString));
+    setLoading(false);
   }
 
   return (
     <div className="App">
       <Container disableGutters>
         <Grid container spacing={4}>
+          {!loading && Object.keys(jsonObject).length === 0 && (
+            <Grid item xs={12}>
+              <DndProvider backend={HTML5Backend}>
+                <Upload
+                  onDrop={handleFileDrop}
+                  onFileChange={handleFileChange}
+                  shorten={false}
+                />
+              </DndProvider>
+            </Grid>
+          )}
           <Grid item xs={12}>
-            <DndProvider backend={HTML5Backend}>
-              <Upload onDrop={handleFileDrop} onFileChange={handleFileChange} />
-            </DndProvider>
+            <Recipe recipe={jsonObject} loading={loading} />
           </Grid>
-          <Grid item xs={12}>
-            {jsonObject && <Recipe recipe={jsonObject} />}
-          </Grid>
+          {!loading && Object.keys(jsonObject).length > 0 && (
+            <Grid item xs={12}>
+              <DndProvider backend={HTML5Backend}>
+                <Upload
+                  onDrop={handleFileDrop}
+                  onFileChange={handleFileChange}
+                  shorten={true}
+                />
+              </DndProvider>
+            </Grid>
+          )}
         </Grid>
       </Container>
     </div>

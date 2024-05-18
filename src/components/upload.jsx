@@ -3,18 +3,18 @@ import { Paper, IconButton } from "@mui/material";
 import { useDrop } from "react-dnd";
 import { NativeTypes } from "react-dnd-html5-backend";
 
-let initialStyle = {
-  border: "5px dashed",
-  borderColor: "#4A490F",
-  background: "#D8D796",
-  display: "flex",
-  height: "30vw",
-  cursor: "pointer",
-  justifyContent: "center",
-  alignItems: "center",
-};
 function UploadZone(props) {
-  const { onDrop, onFileChange } = props;
+  const { onDrop, onFileChange, shorten } = props;
+  const initialStyle = {
+    border: "5px dashed",
+    borderColor: "#4A490F",
+    background: "#D8D796",
+    display: "flex",
+    height: shorten ? "10vw" : "30vw",
+    cursor: "pointer",
+    justifyContent: "center",
+    alignItems: "center",
+  };
   const [{ canDrop, isOver }, drop] = useDrop(
     () => ({
       accept: [NativeTypes.FILE],
